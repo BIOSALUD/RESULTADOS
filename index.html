@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESULTADOS BIOSALUD</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #77ba02;
+        }
+        p {
+            color: #555;
+        }
+        input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: calc(100% - 26px);
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #2a7a8c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1e5b6e;
+        }
+        .results {
+            margin-top: 20px;
+            animation: slideIn 1s ease-in-out;
+        }
+        .pdf-link {
+            display: block;
+            margin: 10px 0;
+            color: #2a7a8c;
+            background: #e0f7fa;
+            padding: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .pdf-link:hover {
+            background-color: #b2ebf2;
+            color: #00796b;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnxmCohME7P0sRM3LwoBVICffaw5THX7Q",
+            authDomain: "viraresultados-8ec20.firebaseapp.com",
+            projectId: "viraresultados-8ec20",
+            storageBucket: "viraresultados-8ec20.appspot.com",
+            messagingSenderId: "464832184858",
+            appId: "1:464832184858:web:29bfac9281c87ec25947a3",
+            measurementId: "G-7ZXS1CGGRW"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+
+        // Define the function in the global scope
+        window.buscarResultados = function buscarResultados() {
+            const documento = document.getElementById('documento').value;
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (documento.trim() === '') {
+                alert('Por favor, ingrese su documento de identidad.');
+                return;
+            }
+
+            // Buscar archivos PDF en Firebase Storage
+            const userRef = ref(storage, documento);
+
+            listAll(userRef).then((result) => {
+                if (result.items.length === 0) {
+                    resultsDiv.innerHTML = 'No se encontraron resultados para este documento.';
+                } else {
+                    result.items.forEach((pdfRef) => {
+                        getDownloadURL(pdfRef).then((url) => {
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.textContent = pdfRef.name;
+                            link.classList.add('pdf-link');
+                            resultsDiv.appendChild(link);
+                        }).catch((error) => {
+                            console.error('Error obteniendo el enlace de descarga:', error);
+                        });
+                    });
+                }
+            }).catch((error) => {
+                console.error('Error buscando resultados:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>BIOSALUD</h1>
+        <p>Ingrese su documento de identidad para ver sus resultados</p>
+        <input type="text" id="documento" placeholder="Documento de Identidad">
+        <button onclick="buscarResultados()">Buscar</button>
+        <div class="results" id="results"></div>
+        <p style="color: grey; font-size: small;">Los exámenes pueden aparecer aquí dentro de un plazo de 10 días, y se eliminarán después de 90 días desde la toma.</p>
+    </div>
+</body>
+</html>
+
+
