@@ -4,73 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESULTADOS BIOSALUD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f4f8;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #e0e9f2);
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            overflow: hidden;
         }
+
+        .banner {
+            background: linear-gradient(135deg, #2a7a8c, #77ba02);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            animation: slideIn 1s ease-in-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            animation: fadeInUp 1.5s ease-in-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 30px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .banner-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
         .container {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 90%;
             max-width: 400px;
+            animation: fadeIn 1.5s ease-in-out;
+            position: relative;
+            overflow: hidden;
         }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(42, 122, 140, 0.1), transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
         h1 {
-            color: #77ba02;
+            color: #f7faf9;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
+
         input {
             padding: 12px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
             width: calc(100% - 26px);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            z-index: 1;
         }
+
+        input:focus {
+            border-color: #2a7a8c;
+            box-shadow: 0 0 8px rgba(42, 122, 140, 0.3);
+            outline: none;
+        }
+
         button {
             padding: 12px 20px;
             background-color: #2a7a8c;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
             margin: 5px;
+            position: relative;
+            z-index: 1;
         }
+
         button:hover {
             background-color: #1e5b6e;
+            transform: translateY(-3px);
         }
+
         .hidden {
             display: none;
         }
+
         .result-card {
             background: #ffffff;
             border-radius: 10px;
             padding: 15px;
             margin: 10px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            animation: fadeInUp 0.5s ease-in-out;
+            position: relative;
+            z-index: 1;
         }
-        .download-btn {
-            background-color: #4CAF50;
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .view-btn, .download-btn {
+            background-color: #2a7a8c;
             padding: 8px 12px;
             font-size: 14px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .view-btn:hover, .download-btn:hover {
+            background-color: #1e5b6e;
+        }
+
+        .info-message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container" id="login-container">
-        <h1>BIOSALUD</h1>
+    <div class="banner" id="banner">
+        <h1>BIENVENIDO(A)</h1>
+        <div class="banner-buttons">
+            <button class="banner-btn" id="medico-btn">Soy Médico</button>
+            <button class="banner-btn" id="paciente-btn">Soy Paciente</button>
+        </div>
+    </div>
+
+    <div class="container hidden" id="login-container">
+        <h1>INICIAR SESIÓN</h1>
         <input type="email" id="email" placeholder="Correo Electrónico">
         <input type="password" id="password" placeholder="Contraseña">
         <button id="login-btn">Iniciar Sesión</button>
@@ -84,6 +236,9 @@
         <input type="text" id="documento" placeholder="Documento de Identidad">
         <button id="search-btn">Buscar</button>
         <div id="results"></div>
+        <div class="info-message">
+            <p>Los exámenes que aparecen aquí estarán disponibles por 40 días y luego serán eliminados. También han sido enviados a su correo electrónico.</p>
+        </div>
     </div>
 
     <script type="module">
@@ -105,6 +260,16 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
         
+        document.getElementById("medico-btn").addEventListener("click", () => {
+            document.getElementById("banner").classList.add("hidden");
+            document.getElementById("login-container").classList.remove("hidden");
+        });
+
+        document.getElementById("paciente-btn").addEventListener("click", () => {
+            document.getElementById("banner").classList.add("hidden");
+            document.getElementById("login-container").classList.remove("hidden");
+        });
+
         document.getElementById("login-btn").addEventListener("click", () => {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
@@ -149,7 +314,18 @@
             listAll(userRef).then(result => {
                 result.items.forEach(pdfRef => {
                     getDownloadURL(pdfRef).then(url => {
-                        resultsDiv.innerHTML += `<div class='result-card'>${pdfRef.name}<button class='download-btn' onclick='window.open("${url}")'>Descargar</button></div>`;
+                        resultsDiv.innerHTML += `
+                            <div class='result-card'>
+                                ${pdfRef.name}
+                                <div class="result-actions">
+                                    <button class="view-btn" onclick='window.open("${url}")'>
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="download-btn" onclick='window.open("${url}")'>
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>`;
                     });
                 });
             }).catch(() => {
