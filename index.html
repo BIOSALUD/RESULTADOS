@@ -21,20 +21,17 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 90%;
-            max-width: 500px;
+            max-width: 400px;
         }
         h1 {
             color: #77ba02;
-        }
-        p {
-            color: #555;
         }
         input {
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
             width: calc(100% - 26px);
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-size: 16px;
         }
         button {
@@ -46,39 +43,54 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
+            margin: 5px;
         }
         button:hover {
             background-color: #1e5b6e;
         }
-        .results {
-            margin-top: 20px;
-            animation: slideIn 1s ease-in-out;
+        .hidden {
+            display: none;
         }
-        .pdf-link {
-            display: block;
-            margin: 10px 0;
-            color: #2a7a8c;
-            background: #e0f7fa;
-            padding: 10px;
+        .result-card {
+            background: #ffffff;
             border-radius: 10px;
-            text-decoration: none;
-            transition: background-color 0.3s, color 0.3s;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .pdf-link:hover {
-            background-color: #b2ebf2;
-            color: #00796b;
-        }
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .download-btn {
+            background-color: #4CAF50;
+            padding: 8px 12px;
+            font-size: 14px;
         }
     </style>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+</head>
+<body>
+    <div class="container" id="login-container">
+        <h1>BIOSALUD</h1>
+        <input type="email" id="email" placeholder="Correo Electrónico">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button id="login-btn">Iniciar Sesión</button>
+        <button id="register-btn">Registrarse</button>
+        <button id="reset-btn">Olvidé mi contraseña</button>
+        <p id="message"></p>
+    </div>
 
-        // Your web app's Firebase configuration
+    <div class="container hidden" id="search-container">
+        <h1>Mis Resultados</h1>
+        <input type="text" id="documento" placeholder="Documento de Identidad">
+        <button id="search-btn">Buscar</button>
+        <div id="results"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyBnxmCohME7P0sRM3LwoBVICffaw5THX7Q",
             authDomain: "viraresultados-8ec20.firebaseapp.com",
@@ -88,57 +100,62 @@
             appId: "1:464832184858:web:29bfac9281c87ec25947a3",
             measurementId: "G-7ZXS1CGGRW"
         };
-
-        // Initialize Firebase
+        
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const storage = getStorage(app);
-
-        // Define the function in the global scope
-        window.buscarResultados = function buscarResultados() {
-            const documento = document.getElementById('documento').value;
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-
-            if (documento.trim() === '') {
-                alert('Por favor, ingrese su documento de identidad.');
-                return;
-            }
-
-            // Buscar archivos PDF en Firebase Storage
+        
+        document.getElementById("login-btn").addEventListener("click", () => {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    document.getElementById("login-container").classList.add("hidden");
+                    document.getElementById("search-container").classList.remove("hidden");
+                })
+                .catch(error => {
+                    document.getElementById("message").innerText = error.message;
+                });
+        });
+        
+        document.getElementById("register-btn").addEventListener("click", () => {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    document.getElementById("message").innerText = "Cuenta creada exitosamente";
+                })
+                .catch(error => {
+                    document.getElementById("message").innerText = error.message;
+                });
+        });
+        
+        document.getElementById("reset-btn").addEventListener("click", () => {
+            const email = document.getElementById("email").value;
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    document.getElementById("message").innerText = "Correo de recuperación enviado";
+                })
+                .catch(error => {
+                    document.getElementById("message").innerText = error.message;
+                });
+        });
+        
+        document.getElementById("search-btn").addEventListener("click", () => {
+            const documento = document.getElementById("documento").value;
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
             const userRef = ref(storage, documento);
-
-            listAll(userRef).then((result) => {
-                if (result.items.length === 0) {
-                    resultsDiv.innerHTML = 'No se encontraron resultados para este documento.';
-                } else {
-                    result.items.forEach((pdfRef) => {
-                        getDownloadURL(pdfRef).then((url) => {
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.textContent = pdfRef.name;
-                            link.classList.add('pdf-link');
-                            resultsDiv.appendChild(link);
-                        }).catch((error) => {
-                            console.error('Error obteniendo el enlace de descarga:', error);
-                        });
+            listAll(userRef).then(result => {
+                result.items.forEach(pdfRef => {
+                    getDownloadURL(pdfRef).then(url => {
+                        resultsDiv.innerHTML += `<div class='result-card'>${pdfRef.name}<button class='download-btn' onclick='window.open("${url}")'>Descargar</button></div>`;
                     });
-                }
-            }).catch((error) => {
-                console.error('Error buscando resultados:', error);
+                });
+            }).catch(() => {
+                resultsDiv.innerHTML = "No se encontraron resultados.";
             });
-        }
+        });
     </script>
-</head>
-<body>
-    <div class="container">
-        <h1>BIOSALUD</h1>
-        <p>Ingrese su documento de identidad para ver sus resultados</p>
-        <input type="text" id="documento" placeholder="Documento de Identidad">
-        <button onclick="buscarResultados()">Buscar</button>
-        <div class="results" id="results"></div>
-        <p style="color: grey; font-size: small;">Los exámenes pueden aparecer aquí dentro de un plazo de 10 días, y se eliminarán después de 90 días desde la toma.</p>
-    </div>
 </body>
 </html>
-
-
