@@ -2,12 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RESULTADOS BIOSALUD</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
+        /* Estilos generales */
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f0f4f8, #e0e9f2);
@@ -15,20 +16,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden; /* Deshabilitar scroll horizontal */
+            overflow-y: auto; /* Habilitar scroll vertical */
         }
 
+        /* Banner principal */
         .banner {
             background: linear-gradient(135deg, #2a7a8c, #77ba02);
             border-radius: 20px;
-            padding: 50px;
+            padding: 20px;
             text-align: center;
             color: white;
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
             animation: fadeIn 1.5s ease-in-out;
             position: relative;
             overflow: hidden;
+            width: 90%;
+            max-width: 400px;
+            margin: 20px;
         }
 
         .banner::before {
@@ -43,7 +49,7 @@
         }
 
         .banner h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 20px;
             animation: slideIn 1s ease-in-out;
             position: relative;
@@ -53,14 +59,15 @@
         .banner-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 10px;
             animation: fadeInUp 1.5s ease-in-out;
             position: relative;
             z-index: 1;
+            flex-wrap: wrap;
         }
 
         .banner-btn {
-            padding: 12px 24px;
+            padding: 10px 20px;
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid white;
             border-radius: 30px;
@@ -68,6 +75,7 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background 0.3s, transform 0.3s;
+            flex: 1 1 45%;
         }
 
         .banner-btn:hover {
@@ -75,17 +83,21 @@
             transform: translateY(-5px);
         }
 
+        /* Contenedores de login y búsqueda */
         .container {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 20px;
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 90%;
             max-width: 400px;
             animation: fadeIn 1.5s ease-in-out;
             position: relative;
-            overflow: hidden;
+            overflow-y: auto; /* Habilitar scroll vertical */
+            overflow-x: hidden; /* Deshabilitar scroll horizontal */
+            max-height: 90vh;
+            margin: 20px;
         }
 
         .container::before {
@@ -101,19 +113,19 @@
 
         h1 {
             color: #2a7a8c;
-            font-size: 2rem;
+            font-size: 1.5rem;
             margin-bottom: 20px;
             position: relative;
             z-index: 1;
         }
 
         input {
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            width: calc(100% - 26px);
+            width: calc(100% - 22px);
             margin-bottom: 15px;
-            font-size: 16px;
+            font-size: 14px;
             transition: border-color 0.3s, box-shadow 0.3s;
             position: relative;
             z-index: 1;
@@ -126,13 +138,13 @@
         }
 
         button {
-            padding: 12px 20px;
+            padding: 10px 15px;
             background-color: #2a7a8c;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             transition: background-color 0.3s, transform 0.3s;
             margin: 5px;
             position: relative;
@@ -148,10 +160,11 @@
             display: none;
         }
 
+        /* Tarjetas de resultados */
         .result-card {
             background: #ffffff;
             border-radius: 10px;
-            padding: 15px;
+            padding: 10px;
             margin: 10px 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             display: flex;
@@ -169,8 +182,8 @@
 
         .view-btn, .download-btn {
             background-color: #2a7a8c;
-            padding: 8px 12px;
-            font-size: 14px;
+            padding: 6px 10px;
+            font-size: 12px;
             border-radius: 5px;
             color: white;
             cursor: pointer;
@@ -186,11 +199,42 @@
 
         .info-message {
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 12px;
             color: #666;
             animation: fadeIn 1s ease-in-out;
         }
 
+        .no-results {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Animaciones */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -213,6 +257,7 @@
     </style>
 </head>
 <body>
+    <!-- Banner principal -->
     <div class="banner" id="banner">
         <h1>BIENVENIDO A BIOSALUD</h1>
         <div class="banner-buttons">
@@ -221,6 +266,7 @@
         </div>
     </div>
 
+    <!-- Contenedor de login -->
     <div class="container hidden" id="login-container">
         <h1>INICIAR SESIÓN</h1>
         <input type="email" id="email" placeholder="Correo Electrónico">
@@ -231,6 +277,7 @@
         <p id="message"></p>
     </div>
 
+    <!-- Contenedor de búsqueda -->
     <div class="container hidden" id="search-container">
         <h1>Mis Resultados</h1>
         <input type="text" id="documento" placeholder="Documento de Identidad">
@@ -241,10 +288,11 @@
         </div>
     </div>
 
+    <!-- Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-        import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+        import { getStorage, ref, listAll, getDownloadURL, getMetadata } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyBnxmCohME7P0sRM3LwoBVICffaw5THX7Q",
@@ -312,24 +360,40 @@
             resultsDiv.innerHTML = "";
             const userRef = ref(storage, documento);
             listAll(userRef).then(result => {
-                result.items.forEach(pdfRef => {
-                    getDownloadURL(pdfRef).then(url => {
-                        resultsDiv.innerHTML += `
-                            <div class='result-card'>
-                                ${pdfRef.name}
-                                <div class="result-actions">
-                                    <button class="view-btn" onclick='window.open("${url}")'>
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="download-btn" onclick='window.open("${url}")'>
-                                        <i class="fas fa-download"></i>
-                                    </button>
-                                </div>
-                            </div>`;
+                if (result.items.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="no-results">
+                            No se encontraron resultados para el documento ingresado.
+                        </div>`;
+                } else {
+                    result.items.forEach(pdfRef => {
+                        getMetadata(pdfRef).then(metadata => {
+                            const fechaCarga = new Date(metadata.timeCreated).toLocaleDateString();
+                            getDownloadURL(pdfRef).then(url => {
+                                resultsDiv.innerHTML += `
+                                    <div class='result-card'>
+                                        <div>
+                                            ${pdfRef.name}
+                                            <div class="fecha-carga">Fecha de carga: ${fechaCarga}</div>
+                                        </div>
+                                        <div class="result-actions">
+                                            <button class="view-btn" onclick='window.open("${url}")'>
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="download-btn" onclick='window.open("${url}")'>
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>`;
+                            });
+                        });
                     });
-                });
+                }
             }).catch(() => {
-                resultsDiv.innerHTML = "No se encontraron resultados.";
+                resultsDiv.innerHTML = `
+                    <div class="no-results">
+                        No se encontraron resultados para el documento ingresado.
+                    </div>`;
             });
         });
     </script>
